@@ -122,6 +122,30 @@ private:
   map<string, unique_ptr<LustObject> > *commands_;
 };
 
+class SquareCommand : public LustObject {
+public:
+  virtual void handle(istringstream&& arguments) {
+    double argument;
+
+    if (!(arguments >> argument)) {
+      cout << "square: could not read double argument." << endl;
+      return;
+    }
+
+   cout << calculate_square(argument) << endl;
+  }
+
+  virtual void print_help() {
+    cout << " square <double>" << endl;
+    cout << "   Calculates the square of <double>." << endl;
+  }
+
+private:
+  double calculate_square(double argument) {
+    return argument * argument;
+  }
+};
+
 
 int main() {
   cout << "Hello! Welcome to the LARICS Universal Shell Terminal (LUST)!" << endl;
@@ -132,6 +156,7 @@ int main() {
   commands["fact"] = unique_ptr<LustObject>(new FactorialCommand());
   commands["checkprime"] = unique_ptr<LustObject>(new CheckPrimeCommand());
   commands["quit"] = unique_ptr<LustObject>(new QuitCommand());
+  commands["square"] = unique_ptr<LustObject>(new SquareCommand());
   // help command needs a pointer to the parent map in order to call each
   // command's print_help() function
   commands["help"] = unique_ptr<LustObject>(new HelpCommand(&commands));
